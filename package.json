@@ -15,11 +15,13 @@
     "presets": [
       "env",
       "react"
-    ]
+    ],
+    "plugins": ["transform-class-properties"]
   },
   "devDependencies": {
     "babel-core": "^6.24.0",
     "babel-loader": "^6.4.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.2.2",
     "babel-preset-react": "^6.23.0",
     "css-loader": "^0.27.3",
