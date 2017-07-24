@@ -1,4 +1,4 @@
-<img src="https://cloud.githubusercontent.com/assets/2933430/24846370/3443ccfc-1d77-11e7-8d1d-dc64d86c3852.png" width="300" align="right">
+<img src="https://tylermcginnis.com/tylermcginnis_glasses-300.png" width="300" align="right">
 
 Modern JavaScript Video Project
 ========
