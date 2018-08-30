@@ -20,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
     "axios": "^0.18.0",
     "prop-types": "^15.6.2",
     "query-string": "^6.1.0",
