@@ -1,18 +1,18 @@
-var React = require('react');
-var PropTypes = require('prop-types');
+const React = require('react');
+const PropTypes = require('prop-types');
 
-function PlayerPreview (props) {
+function PlayerPreview ({ avatar, username, children }) {
   return (
     <div>
       <div className='column'>
         <img
           className='avatar'
-          src={props.avatar}
-          alt={'Avatar for ' + props.username}
+          src={avatar}
+          alt={'Avatar for ' + username}
         />
-        <h2 className='username'>@{props.username}</h2>
+        <h2 className='username'>@{username}</h2>
       </div>
-      {props.children}
+      {children}
     </div>
   )
 }
