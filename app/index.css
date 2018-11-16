@@ -46,6 +46,7 @@ li {
 .avatar {
   width: 150px;
   border-radius: 50%;
+  height: 150px;
 }
 
 .space-list-items {

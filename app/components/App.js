@@ -1,18 +1,20 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Nav from './Nav'
-import Home from './Home'
-import Battle from './Battle'
-import Popular from './Popular'
-import Results from './Results'
+import Loading from './Loading'
 
-class App extends React.Component {
-  render() {
-    return (
-      <Router>
-        <div className='container'>
-          <Nav />
+const Home = lazy(() => import('./Home'))
+const Battle = lazy(() => import('./Battle'))
+const Results = lazy(() => import('./Results'))
+const Popular = lazy(() => import('./Popular'))
 
+function App () {
+  return (
+    <Router>
+      <div className='container'>
+        <Nav />
+
+        <Suspense fallback={<Loading />}>
           <Switch>
             <Route exact path='/' component={Home} />
             <Route exact path='/battle' component={Battle} />
@@ -20,10 +22,10 @@ class App extends React.Component {
             <Route path='/popular' component={Popular} />
             <Route render={() => <p>Not Found</p>} />
           </Switch>
-        </div>
-      </Router>
-    )
-  }
+        </Suspense>
+      </div>
+    </Router>
+  )
 }
 
 export default App;

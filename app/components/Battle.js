@@ -1,134 +1,101 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import PlayerPreview from './PlayerPreview';
 
-class PlayerInput extends React.Component {
-  static propTypes = {
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    onSubmit: PropTypes.func.isRequired,
-  }
-  static defaultProps = {
-    label: 'Username',
-  }
-  state = {
-    username: ''
-  }
-  handleChange = (event) => {
-    const value = event.target.value;
+function PlayerInput ({ onSubmit, label = 'username' }) {
+  const [username, setUsername] = useState('')
 
-    this.setState(() => ({ username: value }))
-  }
-  handleSubmit = (event) => {
-    event.preventDefault();
+  const handleChange = (e) => setUsername(e.target.value)
+  const handleSubmit = (e) => {
+    e.preventDefault()
 
-    this.props.onSubmit(
-      this.props.id,
-      this.state.username
-    );
+    onSubmit(username)
   }
-  render() {
-    const { username } = this.state
-    const { label } = this.props
 
-    return (
-      <form className='column' onSubmit={this.handleSubmit}>
-        <label className='header' htmlFor='username'>{label}</label>
-        <input
-          id='username'
-          placeholder='github username'
-          type='text'
-          value={username}
-          autoComplete='off'
-          onChange={this.handleChange}
-        />
-        <button
-          className='button'
-          type='submit'
-          disabled={!username}>
-            Submit
-        </button>
-      </form>
-    )
-  }
+  return (
+    <form className='column' onSubmit={handleSubmit}>
+      <label className='header' htmlFor='username'>{label}</label>
+      <input
+        id='username'
+        placeholder='github username'
+        type='text'
+        value={username}
+        autoComplete='off'
+        onChange={handleChange}
+      />
+      <button
+        className='button'
+        type='submit'
+        disabled={!username}>
+          Submit
+      </button>
+    </form>
+  )
 }
 
-class Battle extends React.Component {
-  state = {
-    playerOneName: '',
-    playerTwoName: '',
-    playerOneImage: null,
-    playerTwoImage: null,
-  }
-  handleSubmit = (id, username) => {
-    this.setState(() => ({
-      [id + 'Name']: username,
-      [id + 'Image']: `https://github.com/${username}.png?size=200`
-    }))
-  }
-  handleReset = (id) => {
-    this.setState(() => ({
-      [id + 'Name']: '',
-      [id + 'Image']: null
-    }))
-  }
-  render() {
-    const { match } = this.props;
-    const { playerOneName, playerOneImage, playerTwoName, playerTwoImage } = this.state;
+PlayerInput.propTypes = {
+  label: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+}
 
-    return (
-      <div>
-        <div className='row'>
-          {!playerOneName &&
-            <PlayerInput
-              id='playerOne'
-              label='Player One'
-              onSubmit={this.handleSubmit}
-            />}
 
-          {playerOneImage !== null &&
-            <PlayerPreview
-              avatar={playerOneImage}
-              username={playerOneName}>
+// todo .Add errorboundaries around each individual user
+// once hooks supports them.
+
+function Battle ({ match }) {
+  const [playerOne, setPlayerOne] = useState(null)
+  const [playerTwo, setPlayerTwo] = useState(null)
+
+  const submitPlayer = (id, player) => {
+    id === 'playerOne'
+      ? setPlayerOne(player)
+      : setPlayerTwo(player)
+  }
+
+  const resetPlayer = (id) => {
+    id === 'playerOne'
+      ? setPlayerOne(null)
+      : setPlayerTwo(null)
+  }
+
+  return (
+    <div>
+      <div className='row'>
+        {!playerOne
+          ? <PlayerInput label='Player One' onSubmit={(player) => submitPlayer('playerOne', player)}/>
+          : <PlayerPreview
+              username={playerOne}>
                 <button
                   className='reset'
-                  onClick={() => this.handleReset('playerOne')}>
+                  onClick={() => resetPlayer('playerOne')}>
                     Reset
                 </button>
             </PlayerPreview>}
 
-          {!playerTwoName &&
-            <PlayerInput
-              id='playerTwo'
-              label='Player Two'
-              onSubmit={this.handleSubmit}
-            />}
-
-          {playerTwoImage !== null &&
-            <PlayerPreview
-              avatar={playerTwoImage}
-              username={playerTwoName}>
+        {!playerTwo
+          ? <PlayerInput label='Player Two' onSubmit={(player) => submitPlayer('playerTwo', player)}/>
+          : <PlayerPreview
+              username={playerTwo}>
                 <button
                   className='reset'
-                  onClick={() => this.handleReset('playerTwo')}>
+                  onClick={() => resetPlayer('playerTwo')}>
                     Reset
                 </button>
             </PlayerPreview>}
-        </div>
-
-        {playerOneImage && playerTwoImage &&
-          <Link
-            className='button'
-            to={{
-              pathname: match.url + '/results',
-              search: `?playerOneName=${playerOneName}&playerTwoName=${playerTwoName}`
-            }}>
-              Battle
-          </Link>}
       </div>
-    )
-  }
+
+      {playerOne && playerTwo &&
+        <Link
+          className='button'
+          to={{
+            pathname: match.url + '/results',
+            search: `?playerOneName=${playerOne}&playerTwoName=${playerTwo}`
+          }}>
+            Battle
+        </Link>}
+    </div>
+  )
 }
 
 export default Battle;

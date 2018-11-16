@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { ConcurrentMode } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css'
 import App from './components/App';
 
 ReactDOM.render(
-  <App />,
+  <ConcurrentMode>
+    <App />
+  </ConcurrentMode>,
   document.getElementById('app')
 );
